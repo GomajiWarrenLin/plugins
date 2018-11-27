@@ -39,7 +39,8 @@ void main() {
         }
         return null;
       });
-      preferences = await SharedPreferences.getInstance();
+
+      preferences = await SharedPreferences.getInstance(prefix: "flutter.", sharedPreferenceName: "user");
       log.clear();
     });
 

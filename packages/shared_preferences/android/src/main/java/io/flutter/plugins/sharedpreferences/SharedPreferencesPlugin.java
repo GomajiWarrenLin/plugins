@@ -35,6 +35,9 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
 
   private final android.content.SharedPreferences preferences;
 
+  private Context context;
+  private static String prefix = "flutter.";
+
   public static void registerWith(PluginRegistry.Registrar registrar) {
     MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
     SharedPreferencesPlugin instance = new SharedPreferencesPlugin(registrar.context());
@@ -42,6 +45,7 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
   }
 
   private SharedPreferencesPlugin(Context context) {
+    this.context = context;
     preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
   }
 
@@ -79,7 +83,7 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
     Map<String, ?> allPrefs = preferences.getAll();
     Map<String, Object> filteredPrefs = new HashMap<>();
     for (String key : allPrefs.keySet()) {
-      if (key.startsWith("flutter.")) {
+      if (key.startsWith(prefix)) {
         Object value = allPrefs.get(key);
         if (value instanceof String) {
           String stringValue = (String) value;
@@ -118,6 +122,13 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
     boolean status = false;
     try {
       switch (call.method) {
+        case "setSharePreferenceName":
+          String name = call.argument("name");
+          preferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+          break;
+        case "setPrefix":
+          prefix = call.argument("prefix");
+          break;
         case "setBool":
           status = preferences.edit().putBoolean(key, (boolean) call.argument("value")).commit();
           break;

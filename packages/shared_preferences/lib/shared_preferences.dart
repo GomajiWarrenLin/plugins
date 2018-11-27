@@ -17,9 +17,24 @@ const MethodChannel _kChannel =
 class SharedPreferences {
   SharedPreferences._(this._preferenceCache);
 
-  static const String _prefix = 'flutter.';
+  static String _prefix = 'flutter.';
   static SharedPreferences _instance;
-  static Future<SharedPreferences> getInstance() async {
+
+  static Future<SharedPreferences> getInstance(
+      {String prefix = 'flutter.', String sharedPreferenceName}) async {
+    _prefix = prefix;
+    final Map<String, dynamic> params = <String, dynamic>{
+      'prefix': _prefix,
+    };
+    _kChannel.invokeMethod('setPrefix', params);
+
+    if (sharedPreferenceName.isNotEmpty){
+      final Map<String, dynamic> params = <String, dynamic>{
+        'name': sharedPreferenceName,
+      };
+      _kChannel.invokeMethod('setSharePreferenceName', params);
+    }
+
     if (_instance == null) {
       final Map<Object, Object> fromSystem =
           await _kChannel.invokeMethod('getAll');
@@ -27,7 +42,7 @@ class SharedPreferences {
       // Strip the flutter. prefix from the returned preferences.
       final Map<String, Object> preferencesMap = <String, Object>{};
       for (String key in fromSystem.keys) {
-        assert(key.startsWith(_prefix));
+//        assert(key.startsWith(_prefix));
         preferencesMap[key.substring(_prefix.length)] = fromSystem[key];
       }
       _instance = SharedPreferences._(preferencesMap);
