@@ -28,7 +28,7 @@ class SharedPreferences {
     };
     _kChannel.invokeMethod('setPrefix', params);
 
-    if (sharedPreferenceName.isNotEmpty){
+    if (sharedPreferenceName != null && sharedPreferenceName.isNotEmpty){
       final Map<String, dynamic> params = <String, dynamic>{
         'name': sharedPreferenceName,
       };
