@@ -33,7 +33,7 @@ public class SharedPreferencesPlugin implements MethodCallHandler {
   private static final String LIST_IDENTIFIER = "VGhpcyBpcyB0aGUgcHJlZml4IGZvciBhIGxpc3Qu";
   private static final String BIG_INTEGER_PREFIX = "VGhpcyBpcyB0aGUgcHJlZml4IGZvciBCaWdJbnRlZ2Vy";
 
-  private final android.content.SharedPreferences preferences;
+  private android.content.SharedPreferences preferences;
 
   private Context context;
   private static String prefix = "flutter.";
