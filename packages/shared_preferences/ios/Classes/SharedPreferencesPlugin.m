@@ -78,7 +78,7 @@ static NSMutableDictionary *getAllPrefs() {
   NSMutableDictionary *filteredPrefs = [NSMutableDictionary dictionary];
   if (prefs != nil) {
     for (NSString *candidateKey in prefs) {
-      if ([candidateKey hasPrefix:PREFIX]) {
+      if ([@"" isEqualToString:PREFIX] || [candidateKey hasPrefix:PREFIX]) {
         [filteredPrefs setObject:prefs[candidateKey] forKey:candidateKey];
       }
     }
